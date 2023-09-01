@@ -1,5 +1,29 @@
-#This code is developed by Sambhram Satapathy
+#This Code is developed by Sambhram Satapathy.
 import random
+
+
+"""In the code you provided, the following object-oriented programming (OOP) concepts are used:
+
+->Classes and Objects: The code defines a class HandCricketGame, 
+which encapsulates the behavior and state of a hand cricket game. 
+The game object created in the main function is an instance of this class.
+
+->Constructor (__init__): The __init__ method is used to initialize the state of the HandCricketGame object by 
+setting attributes such as self.choice and self.balls.
+
+->Methods: The code defines various methods within the HandCricketGame class, 
+such as play, toss, start_innings, User_1st_batting, 
+User_1st_bowling, Computer_1st_batting, and Computer_1st_bowling.
+ These methods encapsulate the functionality of the game and are called to perform specific tasks.
+
+->Encapsulation: The attributes self.choice and self.balls are 
+encapsulated within the HandCricketGame class, making them private to the class.
+ Access to these attributes is controlled through methods.
+
+->Abstraction: The methods in the class provide a high-level abstraction
+ of the game's functionality. Users of the class interact with these methods 
+ without needing to know the low-level details of how the game is implemented.
+"""
 class HandCricketGame:
     def __init__(self):
         self.choice = None
@@ -120,7 +144,7 @@ class HandCricketGame:
         
             else:
                 total_score_c+=comp_num
-                if total_score_c>total_score_p:
+                if total_score_c>=total_score_p:
                         print("You lost the match")
                         break
         print("The total score of computer is:", total_score_c)
@@ -165,8 +189,8 @@ class HandCricketGame:
                     break
                 except ValueError as e:
                     print(e)
-            print(comp_num)
-            print(player_num)
+            print(f"The computer chose {comp_num}")
+            print(f"You chose {player_num}")
             
             if player_num==comp_num:
                 if total_score_p<total_score_c:
@@ -176,7 +200,7 @@ class HandCricketGame:
         
             else:
                 total_score_p+=player_num
-                if total_score_p>total_score_c:
+                if total_score_p>=total_score_c:
                         print("You won the match\n")
                         break
         print("Your total is:", total_score_p)
@@ -220,8 +244,8 @@ class HandCricketGame:
                     break
                 except ValueError as e:
                     print(e)
-            print(comp_num)
-            print(player_num)
+            print("The computer chose {comp_num}")
+            print(f"You scored{player_num}")
             
             if player_num==comp_num:
                 if total_score_p<total_score_c:
@@ -231,7 +255,7 @@ class HandCricketGame:
         
             else:
                 total_score_p+=player_num
-                if total_score_p>total_score_c:
+                if total_score_p>=total_score_c:
                         print("You won the match")
                         break
         print("Your total is:", total_score_p)
@@ -286,7 +310,7 @@ class HandCricketGame:
         
             else:
                 total_score_c+=comp_num
-                if total_score_c>total_score_p:
+                if total_score_c>=total_score_p:
                         print("You lost the match")
                         break
         print("The total score of computer is:", total_score_c)
