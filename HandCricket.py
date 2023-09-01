@@ -25,9 +25,6 @@ encapsulated within the HandCricketGame class, making them private to the class.
  without needing to know the low-level details of how the game is implemented.
 """
 
-
-
-
 class HandCricketGame:
     def __init__(self):
         self.choice = None
