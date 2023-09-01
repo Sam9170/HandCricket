@@ -1,4 +1,4 @@
-#This Code is developed by Sambhram Satapathy.
+#This code is developed by Sambhram Satapathy
 import random
 
 
@@ -24,6 +24,10 @@ encapsulated within the HandCricketGame class, making them private to the class.
  of the game's functionality. Users of the class interact with these methods 
  without needing to know the low-level details of how the game is implemented.
 """
+
+
+
+
 class HandCricketGame:
     def __init__(self):
         self.choice = None
@@ -99,6 +103,7 @@ class HandCricketGame:
         print("You are batting first")
         for i in range(balls):
             print(f"This is the {i} ball")
+            print("\n")
             comp_num=random.randint(1,6)
             while True:
                 try:
@@ -110,6 +115,7 @@ class HandCricketGame:
                     print(e)
             print(f"The computer chose {comp_num}")
             print(f"You chose {player_num}")
+            print("\n")
             if player_num==comp_num:
                 print("Oh you lost wicket\n")
                 break
@@ -133,8 +139,8 @@ class HandCricketGame:
                     break
                 except ValueError as e:
                     print(e)
-            print(f"The computer chose{comp_num}")
-            print(f"The player chose{player_num}")
+            print(f"The computer chose {comp_num}")
+            print(f"The player chose {player_num}")
             
             if player_num==comp_num:
                 if total_score_c<total_score_p:
@@ -221,7 +227,7 @@ class HandCricketGame:
                 except ValueError as e:
                     print(e)
             print(f"The computer chose {comp_num}")
-            print(f"You chose{player_num}")
+            print(f"You chose {player_num}")
             if player_num==comp_num:
                 print("Yes! You got his wicket")
                 break
@@ -244,8 +250,8 @@ class HandCricketGame:
                     break
                 except ValueError as e:
                     print(e)
-            print("The computer chose {comp_num}")
-            print(f"You scored{player_num}")
+            print(f"The computer chose {comp_num}")
+            print(f"You scored {player_num}")
             
             if player_num==comp_num:
                 if total_score_p<total_score_c:
