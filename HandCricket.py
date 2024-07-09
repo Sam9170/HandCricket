@@ -1,88 +1,21 @@
-#This code is developed by Sambhram Satapathy
-"""In the code you provided, the following object-oriented programming (OOP) concepts are used:
-
-->Classes and Objects: The code defines a class HandCricketGame, 
-which encapsulates the behavior and state of a hand cricket game. 
-The game object created in the main function is an instance of this class.
-
-->Constructor (__init__): The __init__ method is used to initialize the state of the HandCricketGame object by 
-setting attributes such as self.choice and self.balls.
-
-->Methods: The code defines various methods within the HandCricketGame class, 
-such as play, toss, start_innings, User_1st_batting, 
-User_1st_bowling, Computer_1st_batting, and Computer_1st_bowling.
- These methods encapsulate the functionality of the game and are called to perform specific tasks.
-
-->Encapsulation: The attributes self.choice and self.balls are 
-encapsulated within the HandCricketGame class, making them private to the class.
- Access to these attributes is controlled through methods.
-
-->Abstraction: The methods in the class provide a high-level abstraction
- of the game's functionality. Users of the class interact with these methods 
- without needing to know the low-level details of how the game is implemented.
+#This Game is developed by Sambhram Satapathy
+"""
 """
 import mediapipe as mp
 import random
 import cv2
+import sys
 
 class HandCricketGame:
-    def __init__(self):
-        self.choice = None
-        self.balls = None
+    def __init__(self, choice, balls):
+        self.choice = choice
+        self.balls = balls
 
-    def play(self):
-        print("Welcome to the Game of Hand Cricket")
-        print("Let's Begin with the Toss\n")
-        
-        while True:
-            try:
-                toss_result = int(input("Enter the toss value 0 for odd or 1 for even: "))
-                if toss_result not in [0, 1]:
-                    raise ValueError("Input must be 0 or 1")
-                break
-            except ValueError as e:
-                print(e)
-        self.toss(toss_result)
-
-    def toss(self, toss_result):
-        T1 = random.randint(1, 6)
-        T2 = random.randint(1, 6)
-        toss_sum = T1 + T2
-        if toss_sum % 2 == 0:
-            if toss_result == 1:
-                print("You Won the toss! Congratulations, it's Even")
-                while True:
-                    try:
-                        self.choice = int(input("Enter your choice, to bat choose 1 or to ball choose 2: "))
-                        if self.choice not in [1, 2]:
-                            raise ValueError("Input must be 1 or 2")
-                        break
-                    except ValueError as e:
-                        print(e)
-            else:
-                print("Oh No! You lost the toss, it's Even")
-                self.choice = random.randint(3, 4)
-        else:
-            if toss_result == 0:
-                print("You Won the toss! Congratulations, it's Odd")
-                while True:
-                    try:
-                        self.choice = int(input("Enter your choice, to bat choose 1 or to ball choose 2: "))
-                        if self.choice not in [1, 2]:
-                            raise ValueError("Input must be 1 or 2")
-                        break
-                    except ValueError as e:
-                        print(e)
-            else:
-                print("Oh No! You lost the toss, it's Odd")
-                self.choice = random.randint(3, 4)
-        self.balls = int(input("Enter the number of balls you want to play in the game: "))
-        
+    def start_game(self):
         self.start_innings(self.balls)
 
     def start_innings(self, balls):
         print("It's the start of the First Innings!")
-        print("\n")
         print(f"The game will be played for {self.balls} balls. Let the Game begin")
         print("\n")
 
@@ -101,12 +34,10 @@ class HandCricketGame:
         print("You are batting first")
         for i in range(balls):
             print(f"This is the {i} ball")
-            print("\n")
             comp_num = random.randint(1, 6)
             player_num = detect_finger_count()
             print(f"The computer chose {comp_num}")
             print(f"You chose {player_num}")
-            print("\n")
             if player_num == comp_num:
                 print("Oh you lost wicket\n")
                 break
@@ -115,7 +46,6 @@ class HandCricketGame:
         print(f"You scored {total_score_p}")
         total_score_p += 1
         print("Your gave the target to chase:", total_score_p)
-        print("\n")
         print("Welcome to the second Innings\n")
 
         for i in range(balls):
@@ -130,7 +60,6 @@ class HandCricketGame:
                     print("He is out")
                     print("You won the match\n")
                     break
-
             else:
                 total_score_c += comp_num
                 if total_score_c >= total_score_p:
@@ -155,7 +84,6 @@ class HandCricketGame:
         print(f"Computer has scored {total_score_c}")
         total_score_c += 1
         print("Your target to chase is:", total_score_c)
-        print("\n")
         print("Welcome to the second Innings\n")
         total_score_p = 0
         for i in range(balls):
@@ -170,7 +98,6 @@ class HandCricketGame:
                     print("You are out")
                     print("You lost the match\n")
                     break
-
             else:
                 total_score_p += player_num
                 if total_score_p >= total_score_c:
@@ -209,7 +136,6 @@ class HandCricketGame:
                     print("You are out")
                     print("You lost the match\n")
                     break
-
             else:
                 total_score_p += player_num
                 if total_score_p >= total_score_c:
@@ -235,7 +161,6 @@ class HandCricketGame:
         print(f"You scored {total_score_p}")
         total_score_p += 1
         print("Your gave target to chase:", total_score_p)
-        print("\n")
         print("Welcome to the second Innings\n")
         for i in range(balls):
             print(f"This the {i} ball\n")
@@ -249,7 +174,6 @@ class HandCricketGame:
                     print("He is out")
                     print("You won the match\n")
                     break
-
             else:
                 total_score_c += comp_num
                 if total_score_c >= total_score_p:
@@ -319,8 +243,11 @@ def count_fingers(image, hand_landmarks):
     return 0
 
 def main():
-    game = HandCricketGame()
-    game.play()
+    choice = int(sys.argv[1])
+    balls = int(sys.argv[2])
+    game = HandCricketGame(choice, balls)
+    game.start_game()
 
 if __name__ == "__main__":
     main()
+
