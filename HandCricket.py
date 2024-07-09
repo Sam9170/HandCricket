@@ -1,5 +1,25 @@
 #This Game is developed by Sambhram Satapathy
 """
+This script implements a hand cricket game where a user can play against the computer. The user shows a number of fingers to the camera, and the computer generates a random number between 1 and 6. The game can be played in four different modes: User batting first, User bowling first, Computer batting first, and Computer bowling first.
+
+Classes:
+    HandCricketGame: Manages the game logic for the hand cricket game.
+
+Functions:
+    detect_finger_count: Detects the number of fingers shown by the user using the webcam.
+    count_fingers: Helper function to count the number of fingers shown.
+    main: Entry point for the script, initializes and starts the game.
+
+Usage:
+    Run the script with the following command:
+    python script_name.py <choice> <balls>
+    where <choice> is the game mode (1-4) and <balls> is the number of balls to be played.
+
+Dependencies:
+    mediapipe
+    random
+    cv2 (OpenCV)
+    sys
 """
 import mediapipe as mp
 import random

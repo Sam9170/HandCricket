@@ -1,17 +1,16 @@
 import flet as ft
+import subprocess
 
 def main(page: ft.Page):
     page.title = "Hand Cricket Game"
 
-    def navigate_to(route):
-        if route == "Home":
-            content.controls.clear()
+    def navigate_to(index):
+        content.controls.clear()
+        if index == 0:
             content.controls.append(home_page())
-        elif route == "About":
-            content.controls.clear()
+        elif index == 1:
             content.controls.append(about_page())
-        elif route == "Login":
-            content.controls.clear()
+        elif index == 2:
             content.controls.append(login_page())
         page.update()
 
@@ -20,8 +19,11 @@ def main(page: ft.Page):
         password = password_input.value
         if username == "admin" and password == "password":
             login_result.value = "Login Successful!"
+            login_result.color = ft.colors.GREEN
+            subprocess.run(["python", "TossPage.py"])
         else:
             login_result.value = "Invalid credentials, please try again."
+            login_result.color = ft.colors.RED
         page.update()
 
     def home_page():
@@ -36,15 +38,35 @@ def main(page: ft.Page):
 
     def login_page():
         global username_input, password_input, login_result
-        username_input = ft.TextField(label="Username", width=300)
-        password_input = ft.TextField(label="Password", password=True, width=300)
+        username_input = ft.TextField(
+            label="Username",
+            width=300,
+            border_color=ft.colors.BLUE,
+            border_width=2,
+            focused_border_color=ft.colors.BLUE_ACCENT,
+            hint_text="Enter your username",
+            icon=ft.icons.PERSON
+        )
+        password_input = ft.TextField(
+            label="Password",
+            password=True,
+            width=300,
+            border_color=ft.colors.BLUE,
+            border_width=2,
+            focused_border_color=ft.colors.BLUE_ACCENT,
+            hint_text="Enter your password",
+            icon=ft.icons.LOCK
+        )
         login_result = ft.Text("", color=ft.colors.RED)
-        return ft.Column([
-            username_input,
-            password_input,
-            ft.ElevatedButton("Login", on_click=login),
-            login_result
-        ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+        return ft.Container(
+            content=ft.Column([
+                username_input,
+                password_input,
+                ft.ElevatedButton("Login", on_click=login),
+                login_result
+            ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=20),
+            alignment=ft.alignment.center
+        )
 
     global username_input, password_input, login_result
     username_input = ft.TextField()
@@ -54,18 +76,24 @@ def main(page: ft.Page):
 
     content.controls.append(home_page())
 
-    navbar = ft.Container(
-        ft.Row([
-            ft.ElevatedButton("Home", on_click=lambda e: navigate_to("Home")),
-            ft.ElevatedButton("About", on_click=lambda e: navigate_to("About")),
-            ft.ElevatedButton("Login", on_click=lambda e: navigate_to("Login"))
-        ], alignment=ft.MainAxisAlignment.CENTER, spacing=20),
-        padding=ft.padding.only(bottom=20)
+    page.navigation_bar = ft.CupertinoNavigationBar(
+        bgcolor=ft.colors.INDIGO_400,
+        inactive_color=ft.colors.GREY,
+        active_color=ft.colors.BLACK,
+        on_change=lambda e: navigate_to(e.control.selected_index),
+        destinations=[
+            ft.NavigationBarDestination(icon=ft.icons.HOME, label="Home"),
+            ft.NavigationBarDestination(icon=ft.icons.PERSON, label="About Us"),
+            ft.NavigationBarDestination(
+                icon=ft.icons.LOGIN_OUTLINED,
+                selected_icon=ft.icons.LOGIN,
+                label="Login",
+            ),
+        ]
     )
 
     page.add(ft.Container(
         content=ft.Column([
-            navbar,
             content
         ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=20),
         padding=ft.padding.all(20))
