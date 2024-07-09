@@ -33,6 +33,7 @@ def main(page: ft.Page):
             result_text.value = f"You lost the toss. It was {'Even' if is_even else 'Odd'}."
             result_text.value += f"\nComputer chose to {'Bat' if choice == 1 else 'Ball'} first."
             balls = get_balls()
+            choice_buttons.visible = False
             letsplay_button.visible = True
         
         page.update()
@@ -60,7 +61,23 @@ def main(page: ft.Page):
         subprocess.run(["python", "HandCricket.py", str(choice), str(balls)])
 
     def Game_Page():
-        return ft.Text("Welcome to the World of Cricket! Let's Play!", size=24, text_align=ft.TextAlign.CENTER)
+        # Create a text widget for displaying output
+        output_text = ft.Text("", size=18, color=ft.colors.BLUE, text_align=ft.TextAlign.CENTER)
+
+        # Create the "Enter" button with no specific functionality here
+        enter_button = ft.ElevatedButton("Enter", width=150, height=50)
+
+        return ft.Column(
+            [
+                ft.Text("Welcome to the World of Cricket! Let's Play!", size=24, text_align=ft.TextAlign.CENTER),
+                output_text,
+                enter_button
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=20
+        )
+
 
     choice = None
     balls = None

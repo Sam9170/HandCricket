@@ -31,9 +31,9 @@ def main(page: ft.Page):
 
     def about_page():
         return ft.Column([
-            ft.Image(src="developer.jpg", width=150, height=150),
+            ft.CircleAvatar(content=ft.Icon(ft.icons.PERSON_2_OUTLINED),color=ft.colors.YELLOW_200,bgcolor=ft.colors.AMBER_700),
             ft.Text("About the Developer", size=24, text_align=ft.TextAlign.CENTER),
-            ft.Text("This app was developed by a passionate software developer with expertise in Python and web development. The developer is dedicated to creating efficient and user-friendly applications."),
+            ft.Text("This Game is under development developed by a passionate software developer with expertise in Python. The developer is dedicated to creating efficient and user-friendly applications."),
         ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=10)
 
     def login_page():
@@ -77,7 +77,7 @@ def main(page: ft.Page):
     content.controls.append(home_page())
 
     page.navigation_bar = ft.CupertinoNavigationBar(
-        bgcolor=ft.colors.INDIGO_400,
+        bgcolor=ft.colors.DEEP_PURPLE_800,
         inactive_color=ft.colors.GREY,
         active_color=ft.colors.BLACK,
         on_change=lambda e: navigate_to(e.control.selected_index),
