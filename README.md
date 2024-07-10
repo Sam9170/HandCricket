@@ -27,5 +27,5 @@ Welcome to the HandCricket Game App! Remember the good old days of playing crick
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/handcricket-game-app.git
-   cd handcricket-game-app
+   git clone https://github.com/{your_username}/HandCricket.git
+   cd HandCricket
