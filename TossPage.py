@@ -1,8 +1,10 @@
 import random
 import flet as ft
 import subprocess
+import keyboard
 
 def main(page: ft.Page):
+    page.window_maximized
     page.title = "Hand Cricket Game"
 
     def toss_odd(e):
@@ -56,16 +58,20 @@ def main(page: ft.Page):
         return 6
 
     def start_game(e):
+        page.window_maximized
         navigate_to("GamePage")
         print("The Game Started")
         subprocess.run(["python", "HandCricket.py", str(choice), str(balls)])
+
+    def on_enter(e):
+        keyboard.press_and_release("enter")
 
     def Game_Page():
         # Create a text widget for displaying output
         output_text = ft.Text("", size=18, color=ft.colors.BLUE, text_align=ft.TextAlign.CENTER)
 
         # Create the "Enter" button with no specific functionality here
-        enter_button = ft.ElevatedButton("Enter", width=150, height=50)
+        enter_button = ft.ElevatedButton("Enter",on_click=on_enter, width=150, height=50)
 
         return ft.Column(
             [

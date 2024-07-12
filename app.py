@@ -3,6 +3,7 @@ import subprocess
 
 def main(page: ft.Page):
     page.title = "Hand Cricket Game"
+    page.window_maximized
 
     def navigate_to(index):
         content.controls.clear()
