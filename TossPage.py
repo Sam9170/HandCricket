@@ -1,24 +1,36 @@
 import random
 import flet as ft
 import subprocess
+import keyboard
+from theme import apply_theme, TITLE_STYLE, BODY_STYLE
+from settings import game_settings
+
+# Updated button style
+BUTTON_STYLE = ft.ButtonStyle(
+    color=ft.colors.WHITE,
+    bgcolor=ft.colors.BLUE_GREY_800,
+    padding=10,
+    shape=ft.RoundedRectangleBorder(radius=10),
+)
 
 def main(page: ft.Page):
+    page.window.maximized = True
     page.title = "Hand Cricket Game"
+    
+    # Apply a darker theme
+    page.bgcolor = ft.colors.BLUE_GREY_900
+    page.theme = ft.Theme(color_scheme=ft.ColorScheme(
+        primary=ft.colors.BLUE_400,
+        primary_container=ft.colors.BLUE_900,
+        secondary=ft.colors.TEAL_400,
+        background=ft.colors.BLUE_GREY_900,
+    ))
 
-    def toss_odd(e):
-        toss(0)
-
-    def toss_even(e):
-        toss(1)
-
-    def navigate_to(route):
-        if route == "GamePage":
-            content.controls.clear()
-            content.controls.append(Game_Page())
-            page.update()
+    choice = None
+    balls = None
 
     def toss(toss_choice):
-        nonlocal choice, balls, result_text, choice_buttons, letsplay_button
+        nonlocal choice, balls
         T1 = random.randint(1, 6)
         T2 = random.randint(1, 6)
         toss_sum = T1 + T2
@@ -38,70 +50,57 @@ def main(page: ft.Page):
         
         page.update()
 
+    def toss_odd(e):
+        toss(0)
+
+    def toss_even(e):
+        toss(1)
+
     def choose_bat(e):
-        nonlocal choice, balls, letsplay_button
+        nonlocal choice, balls
         choice = 1
         balls = get_balls()
         letsplay_button.visible = True
         page.update()
 
     def choose_ball(e):
-        nonlocal choice, balls, letsplay_button
+        nonlocal choice, balls
         choice = 2
         balls = get_balls()
         letsplay_button.visible = True
         page.update()
 
     def get_balls():
-        return 6
+        return game_settings.overs * 6
 
     def start_game(e):
-        navigate_to("GamePage")
-        print("The Game Started")
-        subprocess.run(["python", "HandCricket.py", str(choice), str(balls)])
+        page.window.maximized = True
+        subprocess.Popen(["python", "HandCricket.py", str(choice), str(balls)])
+        page.window_destroy()
 
-    def Game_Page():
-        # Create a text widget for displaying output
-        output_text = ft.Text("", size=18, color=ft.colors.BLUE, text_align=ft.TextAlign.CENTER)
+    def on_enter(e):
+        keyboard.press_and_release("enter")
 
-        # Create the "Enter" button with no specific functionality here
-        enter_button = ft.ElevatedButton("Enter", width=150, height=50)
-
-        return ft.Column(
-            [
-                ft.Text("Welcome to the World of Cricket! Let's Play!", size=24, text_align=ft.TextAlign.CENTER),
-                output_text,
-                enter_button
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            spacing=20
-        )
-
-
-    choice = None
-    balls = None
-
-    intro_text = ft.Text("Welcome to the Game of Hand Cricket", size=30, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER)
-    toss_instruction = ft.Text("Let's Begin with the Toss", size=20, text_align=ft.TextAlign.CENTER)
+    intro_text = ft.Text("Welcome to the Game of Hand Cricket", style=TITLE_STYLE, color=ft.colors.WHITE)
+    toss_instruction = ft.Text("Let's Begin with the Toss", style=BODY_STYLE, color=ft.colors.WHITE70)
     toss_buttons = ft.Container(
         content=ft.Row([
-            ft.ElevatedButton("Odd", on_click=toss_odd, width=150, height=50),
-            ft.ElevatedButton("Even", on_click=toss_even, width=150, height=50)
+            ft.ElevatedButton("Odd", on_click=toss_odd, width=150, height=50, style=BUTTON_STYLE),
+            ft.ElevatedButton("Even", on_click=toss_even, width=150, height=50, style=BUTTON_STYLE)
         ], alignment=ft.MainAxisAlignment.CENTER, spacing=20),
         padding=ft.padding.only(top=20)
     )
-    result_text = ft.Text("", size=18, color=ft.colors.BLUE, text_align=ft.TextAlign.CENTER)
+    result_text = ft.Text("", style=BODY_STYLE, color=ft.colors.BLUE_200, text_align=ft.TextAlign.CENTER)
     choice_buttons = ft.Container(
         content=ft.Row([
-            ft.ElevatedButton("Bat", on_click=choose_bat, width=150, height=50),
-            ft.ElevatedButton("Ball", on_click=choose_ball, width=150, height=50)
+            ft.ElevatedButton("Bat", on_click=choose_bat, width=150, height=50, style=BUTTON_STYLE),
+            ft.ElevatedButton("Ball", on_click=choose_ball, width=150, height=50, style=BUTTON_STYLE)
         ], alignment=ft.MainAxisAlignment.CENTER, spacing=20),
         padding=ft.padding.only(top=20),
         visible=False
     )
     letsplay_button = ft.Container(
-        content=ft.ElevatedButton("Let's Play", on_click=start_game, width=150, height=50),
+        content=ft.ElevatedButton("Let's Play", on_click=start_game, width=150, height=50, style=BUTTON_STYLE),
         padding=ft.padding.only(top=20),
         visible=False
     )
@@ -118,6 +117,3 @@ def main(page: ft.Page):
     page.add(ft.Container(content=content, padding=ft.padding.all(20)))
 
 ft.app(target=main)
-
-if __name__ == "__main__":
-    pass
