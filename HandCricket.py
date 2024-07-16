@@ -1,30 +1,18 @@
-#This Game is developed by Sambhram Satapathy
-"""
-This script implements a hand cricket game where a user can play against the computer. The user shows a number of fingers to the camera, and the computer generates a random number between 1 and 6. The game can be played in four different modes: User batting first, User bowling first, Computer batting first, and Computer bowling first.
-
-Classes:
-    HandCricketGame: Manages the game logic for the hand cricket game.
-
-Functions:
-    detect_finger_count: Detects the number of fingers shown by the user using the webcam.
-    count_fingers: Helper function to count the number of fingers shown.
-    main: Entry point for the script, initializes and starts the game.
-
-Usage:
-    Run the script with the following command:
-    python script_name.py <choice> <balls>
-    where <choice> is the game mode (1-4) and <balls> is the number of balls to be played.
-
-Dependencies:
-    mediapipe
-    random
-    cv2 (OpenCV)
-    sys
-"""
 import mediapipe as mp
 import random
 import cv2
 import sys
+import flet as ft
+import io
+from theme import apply_theme, TITLE_STYLE, BODY_STYLE
+
+# Updated button style
+BUTTON_STYLE = ft.ButtonStyle(
+    color=ft.colors.WHITE,
+    bgcolor=ft.colors.BLUE_GREY_800,
+    padding=10,
+    shape=ft.RoundedRectangleBorder(radius=10),
+)
 
 class HandCricketGame:
     def __init__(self, choice, balls):
@@ -201,6 +189,7 @@ class HandCricketGame:
                     break
         print("The total score of computer is:", total_score_c)
 
+
 def detect_finger_count():
     cap = cv2.VideoCapture(0)
     mp_hands = mp.solutions.hands
@@ -262,12 +251,75 @@ def count_fingers(image, hand_landmarks):
 
     return 0
 
-def main():
+def main(page: ft.Page):
+    page.title = "Hand Cricket Game"
+    page.window.maximized = True
+    
+    # Apply a darker theme
+    page.bgcolor = ft.colors.BLUE_GREY_900
+    page.theme = ft.Theme(color_scheme=ft.ColorScheme(
+        primary=ft.colors.BLUE_400,
+        primary_container=ft.colors.BLUE_900,
+        secondary=ft.colors.TEAL_400,
+        background=ft.colors.BLUE_GREY_900,
+    ))
+
     choice = int(sys.argv[1])
     balls = int(sys.argv[2])
     game = HandCricketGame(choice, balls)
-    game.start_game()
+
+    output_text = ft.Text("", style=BODY_STYLE, color=ft.colors.WHITE70, text_align=ft.TextAlign.LEFT)
+    
+    def update_output(text):
+        output_text.value += text
+        page.update()
+
+    # Custom stream to redirect stdout
+    class StdoutRedirect(io.StringIO):
+        def write(self, text):
+            update_output(text)
+
+    stdout_redirect = StdoutRedirect()
+    sys.stdout = stdout_redirect
+
+    def start_game_thread(e):
+        start_button.visible = False
+        page.update()
+        game.start_game()
+        start_button.visible = True
+        page.update()
+
+    start_button = ft.ElevatedButton("Start Game", on_click=start_game_thread, style=BUTTON_STYLE)
+
+    output_list = ft.ListView(
+        [output_text],
+        expand=1,
+        auto_scroll=True
+    )
+
+    page.add(
+        ft.Container(
+            content=ft.Column([
+                ft.Text("Hand Cricket Game", style=TITLE_STYLE, color=ft.colors.WHITE),
+                ft.Container(
+                    content=output_list,
+                    padding=10,
+                    bgcolor=ft.colors.BLUE_GREY_800,
+                    border_radius=10,
+                    expand=True,
+                    height=400,
+                    width=600,
+                ),
+                start_button
+            ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=20),
+            padding=20,
+            alignment=ft.alignment.center,
+            expand=True,
+        )
+    )
+
+    # Restore stdout when the page is dismounted
+    page.on_disconnect = lambda _: setattr(sys, 'stdout', sys.__stdout__)
 
 if __name__ == "__main__":
-    main()
-
+    ft.app(target=main)
